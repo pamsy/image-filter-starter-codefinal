@@ -30,6 +30,26 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
   /**************************************************************************** */
 
   //! END @TODO1
+  app.get("/filteredimage", (req, res) => {
+    let { image_url } = req.query;
+    //console.log(image_url);
+    if (!image_url) {
+        return res.status(400)
+            .send(`name is required`);
+    }
+    //const url string;
+    //let
+    //return res.status(200)
+    //          .send(`Welcome to the Cloud, ${image_url}!`);
+    //2. call filterImageFromURL(image_url) to filter the image
+    //3. send the resulting file in the response
+    //4. deletes any files on the server on finish of the response
+    const result = filterImageFromURL(image_url).then(result => {
+        return res.status(200).sendFile(result, () => {deleteLocalFiles([result]); });
+    }).catch(pams => {
+        res.status(422).send('processing error!');
+    });
+});
   
   // Root Endpoint
   // Displays a simple message to the user
